@@ -23,7 +23,7 @@ def menu():
     val = int_input()
     if val == 1:
         pass
-        #db = Registros_MySQL()
+        #db1 = Registros_MySQL()
     elif val == 2:
         db = Registros_MongoDB()
     else:
@@ -40,6 +40,7 @@ def menu():
                     valores = sensores.getValores()
                     for val in valores:
                         #db.addRegistro(val['nombre'], val['tipo'], val['valor'])
+                        db.addRegistro("Sensores",val.getDocument())
                         print(val)
                     print("Leyendo datos en 5 segundos... (Pulsa ^C para interrumpir)")
                     time.sleep(5)
