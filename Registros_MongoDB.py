@@ -5,7 +5,7 @@ from datetime import datetime as time
 class mongo:
     try:
         connect = MongoClient("mongodb://localhost:27017/")
-        db= connect["examenbull"]
+        db= connect["Sensores"]
     except:
         print("Could not connect to MongoDB")
     
