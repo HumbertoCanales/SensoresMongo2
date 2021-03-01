@@ -6,6 +6,7 @@ import Sensor as s
 class Sensores():
     def __init__(self):
         self.arreglo = []
+        self.valores = []
         self.PIN_TRIG = 23
         self.PIN_ECHO = 24
         self.PIN_PIR = 21
@@ -15,17 +16,14 @@ class Sensores():
         GPIO.setup(self.PIN_TRIG, GPIO.OUT)
         GPIO.setup(self.PIN_ECHO, GPIO.IN)
     
+    def getData(self):
+        return self.valores
+        
     def getPIR(self):
         pir = GPIO.input(21)
-<<<<<<< HEAD
-        self.arreglo.append({"nombre": "PIR", "valor": pir, "tipo": "boleano"})
-        
-=======
         sensor=s.Sensor("PIR",pir,"booleano")
         self.arreglo.append(sensor)
-        GPIO.cleanup()
-
->>>>>>> d306da454e25acb37f2ee501820d6bfde26c2fce
+        
     def getUltrasonico(self):
         try:
             GPIO.output(self.PIN_TRIG, True)
@@ -35,6 +33,7 @@ class Sensores():
                pulso_inicio = time.time()
             while GPIO.input(self.PIN_ECHO) == 1:
                pulso_fin = time.time()
+            time.sleep(0.01)
             duracion = pulso_fin - pulso_inicio
             distancia = (34300 * duracion) / 2
             sensor=s.Sensor("ultrasonido",distancia,"flotante")
@@ -49,7 +48,7 @@ class Sensores():
             try:
                 humedad, temperatura = adafruit_dht.read(11, self.PIN_DHT)
                 if humedad is not None and temperatura is not None:
-                    sensor=s.Sensor("temperatura",temperatura,"flotante")
+                    sensor=s.Sensor("temperatura",6.66,"flotante")
                     sensor2=s.Sensor("humedad",humedad,"flotante")
                     self.arreglo.append(sensor)
                     self.arreglo.append(sensor2)
