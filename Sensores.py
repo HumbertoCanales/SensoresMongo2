@@ -9,32 +9,29 @@ class Sensores():
         self.humedad = 0
         self.pir = 0
         self.arreglo = []
+        self.PIN_TRIG = 23
+        self.PIN_ECHO = 24
+        self.PIN_PIR = 21
+        self.PIN_DHT = 4
+        GPIO.setmode(False)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.PIN_PIR, GPIO.IN)
+        GPIO.setup(self.PIN_TRIG, GPIO.OUT)
+        GPIO.setup(self.PIN_ECHO, GPIO.IN)
     
     def getPIR(self):
-        GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(21, GPIO.IN)
         pir = GPIO.input(21)
         self.arreglo.append({"nombre": "PIR", "valor": pir, "tipo": "boleano"})
         GPIO.cleanup()
 
     def getUltrasonico(self):
-        TRIG = 23
-        ECHO = 24
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(TRIG, GPIO.OUT)
-        GPIO.setup(ECHO, GPIO.IN)
         try:
-            GPIO.output(TRIG, True)
+            GPIO.output(self.PIN_TRIG, True)
             time.sleep(0.00001)
-            GPIO.output(TRIG, False)
-            time.sleep(2)
-            GPIO.output(TRIG, GPIO.LOW)
-            pulso_inicio = time.time()
-            pulso_fin = time.time()
-            while GPIO.input(ECHO) == 0:
+            GPIO.output(self.PIN_TRIG, False)
+            while GPIO.input(self.PIN_ECHO) == 0:
                pulso_inicio = time.time()
-            while GPIO.input(ECHO) == 1:
+            while GPIO.input(self.PIN_ECHO) == 1:
                pulso_fin = time.time()
             duracion = pulso_fin - pulso_inicio
             distancia = (34300 * duracion) / 2
@@ -44,12 +41,11 @@ class Sensores():
         GPIO.cleanup()
 
     def getTempHum(self):
-        pin = 4
         i = 0
         while i <= 5:
             i += 1
             try:
-                humedad, temperatura = adafruit_dht.read(11, pin)
+                humedad, temperatura = adafruit_dht.read(11, self.PIN_DHT)
                 if humedad is not None and temperatura is not None:
                     self.arreglo.append({"nombre": "temperatura", "valor": temperatura, "tipo": "flotante"})
                     self.arreglo.append({"nombre": "humedad", "valor": humedad, "tipo": "flotante"})
