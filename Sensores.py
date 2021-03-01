@@ -17,8 +17,7 @@ class Sensores():
     def getPIR(self):
         pir = GPIO.input(21)
         self.arreglo.append({"nombre": "PIR", "valor": pir, "tipo": "boleano"})
-        GPIO.cleanup()
-
+        
     def getUltrasonico(self):
         try:
             GPIO.output(self.PIN_TRIG, True)
@@ -33,7 +32,6 @@ class Sensores():
             self.arreglo.append({"nombre": "ultrasonico", "valor": distancia, "tipo": "flotante"})
         except RuntimeError as error:
             print("Error: " + error)
-        GPIO.cleanup()
 
     def getTempHum(self):
         i = 0
@@ -51,6 +49,7 @@ class Sensores():
     def getValores(self):
         self.arreglo = []
         self.getPIR()
-        #self.getUltrasonico()
+        self.getUltrasonico()
         self.getTempHum()
+        
         return self.arreglo
