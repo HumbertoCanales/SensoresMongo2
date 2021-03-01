@@ -1,5 +1,5 @@
-#import Adafruit_DHT as adafruit_dht
-#import  RPi.GPIO as GPIO
+import Adafruit_DHT as adafruit_dht
+import  RPi.GPIO as GPIO
 import time
 
 class Sensores():
@@ -11,15 +11,15 @@ class Sensores():
         self.arreglo = []
     
     def getPIR(self):
-        """GPIO.setwarnings(False)
+        GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(21, GPIO.IN)
-        pir = GPIO.input(21)"""
-        self.arreglo.append({"nombre": "PIR", "valor": 1, "tipo": "boleano"})
-        #GPIO.cleanup()
+        pir = GPIO.input(21)
+        self.arreglo.append({"nombre": "PIR", "valor": pir, "tipo": "boleano"})
+        GPIO.cleanup()
 
     def getUltrasonico(self):
-        """TRIG = 23
+        TRIG = 23
         ECHO = 24
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(TRIG, GPIO.OUT)
@@ -37,25 +37,25 @@ class Sensores():
             while GPIO.input(ECHO) == 1:
                pulso_fin = time.time()
             duracion = pulso_fin - pulso_inicio
-            distancia = (34300 * duracion) / 2"""
-        self.arreglo.append({"nombre": "ultrasonico", "valor": 50.1, "tipo": "flotante"})
-        """except RuntimeError as error:
+            distancia = (34300 * duracion) / 2
+            self.arreglo.append({"nombre": "ultrasonico", "valor": distancia, "tipo": "flotante"})
+        except RuntimeError as error:
             print("Error: " + error)
-        GPIO.cleanup()"""
+        GPIO.cleanup()
 
     def getTempHum(self):
-        """pin = 4
+        pin = 4
         i = 0
         while i <= 5:
             i += 1
             try:
                 humedad, temperatura = adafruit_dht.read(11, pin)
-                if humedad is not None and temperatura is not None:"""
-        self.arreglo.append({"nombre": "temperatura", "valor": 27.5, "tipo": "flotante"})
-        self.arreglo.append({"nombre": "humedad", "valor": 108.7, "tipo": "flotante"})
-        """break
+                if humedad is not None and temperatura is not None:
+                    self.arreglo.append({"nombre": "temperatura", "valor": temperatura, "tipo": "flotante"})
+                    self.arreglo.append({"nombre": "humedad", "valor": humedad, "tipo": "flotante"})
+                    break
             except RuntimeError as error:
-                print("Error: " + error)"""
+                print("Error: " + error)
             
     def getValores(self):
         self.arreglo = []

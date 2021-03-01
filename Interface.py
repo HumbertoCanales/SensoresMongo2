@@ -1,7 +1,7 @@
 import sys 
 import time
 from pymongo import MongoClient
-from Registros_MySQL import Registros_MySQL
+#from Registros_MySQL import Registros_MySQL
 from Registros_MongoDB import Registros_MongoDB
 from Sensores import Sensores
 
@@ -22,7 +22,8 @@ def menu():
     print("Elige una base de datos: \n1 - MySQL\n2 - MongoDB")
     val = int_input()
     if val == 1:
-        db = Registros_MySQL()
+        pass
+        #db = Registros_MySQL()
     elif val == 2:
         db = Registros_MongoDB()
     else:
@@ -45,6 +46,7 @@ def menu():
             except KeyboardInterrupt:
                 pass
         elif val == 2:
-            db.leerRegistros()
+            print("XD")
+            #db.leerRegistros()
     
 menu()
