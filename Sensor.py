@@ -11,3 +11,6 @@ class Sensor():
             "tipo":self.tipo
         }
         return document
+
+    def getTupla(self):
+        return (self.nombre,self.valor,self.tipo)
