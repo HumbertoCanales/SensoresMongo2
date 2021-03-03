@@ -3,6 +3,7 @@ import time
 from pymongo import MongoClient
 from Registros_MySQL import Registros_MySQL
 from Registros_MongoDB import mongo
+from Registros_Serial import Registros_Serial
 from Sensores import Sensores
 
 def int_input():
@@ -19,12 +20,14 @@ db = ""
 val = 0      
 
 def menu():
-    print("Elige una base de datos: \n1 - MySQL\n2 - MongoDB")
+    print("Elige un método de almacenamiento: \n1 - MySQL\n2 - MongoDB\n3 - Almacenamiento local")
     val = int_input()
     if val == 1:
         db = Registros_MySQL()
     elif val == 2:
         db = mongo()
+    elif val == 3:
+        db = Registros_Serial()
     else:
         print("Opción no encontrada")
         return
