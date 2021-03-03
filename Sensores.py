@@ -1,8 +1,8 @@
 #import Adafruit_DHT as adafruit_dht
 #import RPi.GPIO as GPIO
-from datetime import date as d
+import datetime as d
 import time
-import Sensor as s
+from Sensor import Sensor
 
 class Sensores():
     def __init__(self):
@@ -17,18 +17,18 @@ class Sensores():
         GPIO.setup(self.PIN_TRIG, GPIO.OUT)
         GPIO.setup(self.PIN_ECHO, GPIO.IN)"""
     
-    def getData(self):
-        return self.valores
+    def getTime(self):
+        return time.strftime('%Y-%m-%d %H:%M:%S')
         
     def getPIR(self):
-        sensor=s.Sensor("PIR",1,"booleano",d.date.today())
+        sensor = Sensor("PIR",1,self.getTime())
         self.arreglo.append(sensor)
         """pir = GPIO.input(21)
         sensor=s.Sensor("PIR",pir,"booleano")
         self.arreglo.append(sensor)"""
         
     def getUltrasonico(self):
-        sensor=s.Sensor("ultrasonico",50.0,"flotante",d.date.today())
+        sensor = Sensor("ultrasonico",50.0,self.getTime())
         self.arreglo.append(sensor)
         """try:
             GPIO.output(self.PIN_TRIG, True)
@@ -47,8 +47,8 @@ class Sensores():
             print("Error: " + error)"""
 
     def getTempHum(self):
-        sensor=s.Sensor("temperatura",6.66,"flotante",d.date.today())
-        sensor2=s.Sensor("humedad",7.77,"flotante",d.date.today())
+        sensor = Sensor("temperatura",6.66,self.getTime())
+        sensor2 = Sensor("humedad",7.77,self.getTime())
         self.arreglo.append(sensor)
         self.arreglo.append(sensor2)
         """i = 0

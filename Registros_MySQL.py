@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 from datetime import datetime as time
-import Registros_MongoDB
+from Sensor import Sensor
 
 class Registros_MySQL:
     def __init__(self):
@@ -23,7 +23,7 @@ class Registros_MySQL:
         self.cur.close()
         self.con.close()
     
-    def insertarRegistro(self, sentencia):
+    def insert(self, sentencia):
         self.__connect__()
         if(self.cur):
             self.cur.execute(sentencia)
@@ -42,7 +42,7 @@ class Registros_MySQL:
             return list(resultados)
         return None
 
-    def consulta(self, sentencia):
+    def query(self, sentencia):
         self.__connect__()
         if(self.cur):
             self.cur.execute(sentencia)
@@ -52,17 +52,17 @@ class Registros_MySQL:
         return None
     
     def addRegistro(self, colection, sensor):
-        id_sensor, tipo = self.consulta("SELECT id, tipo_dato FROM sensores WHERE nombre = '"+sensor.nombre+"'")
-        self.insertarRegistro("INSERT INTO valores (sensor_id,"+tipo+") VALUES ("+str(id_sensor)+","+str(sensor.valor)+")")
+        id_sensor, tipo = self.query("SELECT id, tipo_dato FROM sensores WHERE nombre = '"+sensor.nombre+"'")
+        self.insert("INSERT INTO valores (sensor_id,"+tipo+", created_at) VALUES ("+str(id_sensor)+","+str(sensor.valor)+", '"+str(sensor.fecha)+"')")
 
     def verRegistros(self, nombre_sensor):
         try:
-            id_sensor, tipo = self.consulta("SELECT id, tipo_dato FROM sensores WHERE nombre = '"+nombre_sensor+"'")
-            registros = self.index("SELECT "+tipo+" FROM valores WHERE sensor_id = '"+str(id_sensor)+"'")
+            id_sensor, tipo = self.query("SELECT id, tipo_dato FROM sensores WHERE nombre = '"+nombre_sensor+"'")
+            registros = self.index("SELECT "+tipo+", created_at FROM valores WHERE sensor_id = '"+str(id_sensor)+"'")
             logs = []
             for registro in registros:
-                logs.append(registro[0])
-                print(registro[0])
+                sensor = Sensor("nombre_sensor", registro[0], registro[1])
+                logs.append(sensor)
             return logs
         except:
             return None

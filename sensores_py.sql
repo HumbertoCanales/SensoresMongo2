@@ -10,7 +10,10 @@ CREATE TABLE `valores` (
   `sensor_id` int(10) unsigned NOT NULL,
   `flotante` float DEFAULT NULL,
   `booleano` tinyint(4) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `valores_sensor_id` (`sensor_id`),
   CONSTRAINT `valores_sensor_id` FOREIGN KEY (`sensor_id`) REFERENCES `sensores` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4
+
+INSERT INTO `sensores` (`nombre`,`tipo_dato`) VALUES ("Temperatura","flotante"), ("Humedad","flotante"), ("PIR","booleano"), ("Ultrasonico","flotante")

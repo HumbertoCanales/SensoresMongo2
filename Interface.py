@@ -1,61 +1,79 @@
 import sys 
 import time
-import datetime as d
-from pymongo import MongoClient
 from Registros_MySQL import Registros_MySQL
 from Registros_MongoDB import mongo
 from Registros_Serial import Registros_Serial
 from Sensores import Sensores
 
-def int_input():
-  while True:
-    val = input()
-    try:
-      val = int(val)
-      if val != 0:
-        return val
-    except ValueError:
-      print("Debes ingresar un número entero y que no sea 0")
+class Interface():
+    def __init__(self):
+        self.db = ""
+        self.val = 0
+        self.val2 = 0
 
-db = ""
-val = 0      
-
-def menu():
-    print("Elige un método de almacenamiento: \n1 - MySQL\n2 - MongoDB\n3 - Almacenamiento local")
-    val = int_input()
-    if val == 1:
-        db = Registros_MySQL()
-    elif val == 2:
-        db = mongo()
-    elif val == 3:
-        db = Registros_Serial()
-    else:
-        print("Opción no encontrada")
-        return
-    sensores = Sensores()
-    val = 0
-    while val != 3:
-        print("\nElige una opción: \n1 -  Añadir registros\n2 - Leer registros\n3 - Salir")
-        val = int_input()
-        if val == 1:
-            time.sleep(3)
+    def int_input(self):
+        while True:
+            value = input()
             try:
-                while True:
-                    valores = sensores.getValores()
-                    for sensor in valores:
-                        db.addRegistro("sensores", sensor)
-                        print("Nombre "+sensor.nombre+" Valor:  "+str(sensor.valor))
-                    print("Leyendo datos en 5 segundos... (Pulsa ^C para interrumpir)")
-                    time.sleep(5)
-            except KeyboardInterrupt:
-                pass
-        elif val == 2:
-            nombre_sensor = input("Ingresa el nombre del sensor: ")
-            registros = db.verRegistros(nombre_sensor)
-            if(registros is not None):
-                print("Registros del sensor "+nombre_sensor+":")
-                for registro in registros:
-                    print("Valor: "+str(registro)+" Fecha: ")
-            else:
-                print("Este sensor no se encuentra registrado.")
-menu()
+                value = int(value)
+                if value != 0:
+                    return value
+            except ValueError:
+                print("Debes ingresar un número entero y que no sea 0")
+    
+    def timer(self, secs):
+        for _ in range(secs):
+            print(".", sep=' ', end='', flush=True)
+            time.sleep(1)
+        print("\n")
+
+    def menu(self):
+        self.sensores = Sensores()
+        while self.val != 4:
+            self.val2 = 0 
+            print("\nElige un método de almacenamiento: \n1 - MySQL\n2 - MongoDB\n3 - Almacenamiento local\n4 - Salir")
+            self.val = self.int_input()
+            if self.val == 1:
+                self.db = Registros_MySQL()
+                name = "MySQL"
+            elif self.val == 2:
+                self.db = mongo()
+                name = "MongoDB"
+            elif self.val == 3:
+                self.db = Registros_Serial()
+                name = "Almacenamiento local"
+            if self.val != 4:
+                while self.val2 != 3:
+                    print("\nUsando: [ "+name+" ]\nElige una opción: \n1 - Capturar registros\n2 - Leer registros\n3 - Cambiar de almacenamiento")
+                    self.val2 = self.int_input()
+                    if self.val2 == 1:
+                        self.setValues()
+                    elif self.val2 == 2:
+                        self.getValues()
+
+    def setValues(self):
+        print("Inicializando sensores")
+        self.timer(3)
+        try:
+            while True:
+                valores = self.sensores.getValores()
+                for sensor in valores:
+                    self.db.addRegistro("sensores", sensor)
+                    print("[ "+sensor.nombre+" ] -> "+str(sensor.valor))
+                print("Leyendo datos en 5 segundos (Pulsa ^C para interrumpir)")
+                self.timer(5)
+        except KeyboardInterrupt:
+            pass
+    
+    def getValues(self):
+        nombre_sensor = input("Ingresa el nombre del sensor: ")
+        registros = self.db.verRegistros(nombre_sensor)
+        if(registros is not None):
+            print("\nRegistros del sensor "+nombre_sensor+":")
+            for registro in registros:
+                print("Valor: "+str(registro.valor)+" | Fecha: "+str(registro.fecha))
+        else:
+            print("No hay registros de este sensor")
+
+interface = Interface()
+interface.menu()

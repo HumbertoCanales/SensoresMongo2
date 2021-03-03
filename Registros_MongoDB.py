@@ -1,4 +1,3 @@
-import Sensores as s
 from pymongo import MongoClient
 from pymongo import errors as mongoerrors
 from datetime import datetime as time
@@ -28,24 +27,18 @@ class mongo:
         document = sensor.getDocument()
         self.__connect__()
         col = self.db[colection]
-        x=col.insert(document)
+        x = col.insert(document)
         return x
     
-    def verValores(self,colection,valores):
-        for val in self.verDatos(colection):
-            print(val)
-            '''if('nombre' in val and 'valor' in val and 'tipo' in val):
-                sensor=Sensor(val['nombre'],val['valor'],val['tipo'])
-                valores.append(sensor)'''
     def verRegistros(self, nombre_sensor):
         try:
             myquery={"nombre":nombre_sensor}
             registros = self.verDatos("sensores",myquery)
             logs = []
             for registro in registros:
-                logs.append(registro['valor'])
+                sensor = Sensor("nombre_sensor", registro['valor'], registro['fecha'])
+                logs.append(sensor)
             return logs
         except:
             return None
-        pass
             
