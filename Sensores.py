@@ -20,12 +20,16 @@ class Sensores():
         return self.valores
         
     def getPIR(self):
-        pir = GPIO.input(21)
-        sensor=s.Sensor("PIR",pir,"booleano")
+        sensor=s.Sensor("PIR",1,"booleano")
         self.arreglo.append(sensor)
+        """pir = GPIO.input(21)
+        sensor=s.Sensor("PIR",pir,"booleano")
+        self.arreglo.append(sensor)"""
         
     def getUltrasonico(self):
-        try:
+        sensor=s.Sensor("ultrasonido",50.0,"flotante")
+        self.arreglo.append(sensor)
+        """try:
             GPIO.output(self.PIN_TRIG, True)
             time.sleep(0.00001)
             GPIO.output(self.PIN_TRIG, False)
@@ -39,10 +43,14 @@ class Sensores():
             sensor=s.Sensor("ultrasonido",distancia,"flotante")
             self.arreglo.append(sensor)
         except RuntimeError as error:
-            print("Error: " + error)
+            print("Error: " + error)"""
 
     def getTempHum(self):
-        i = 0
+        sensor=s.Sensor("temperatura",6.66,"flotante")
+        sensor2=s.Sensor("humedad",7.77,"flotante")
+        self.arreglo.append(sensor)
+        self.arreglo.append(sensor2)
+        """i = 0
         while i <= 5:
             i += 1
             try:
@@ -54,7 +62,7 @@ class Sensores():
                     self.arreglo.append(sensor2)
                     break
             except RuntimeError as error:
-                print("Error: " + error)
+                print("Error: " + error)"""
             
     def getValores(self):
         self.arreglo = []
