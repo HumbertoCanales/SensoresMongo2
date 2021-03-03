@@ -1,5 +1,6 @@
 import sys 
 import time
+import datetime as d
 from pymongo import MongoClient
 from Registros_MySQL import Registros_MySQL
 from Registros_MongoDB import mongo

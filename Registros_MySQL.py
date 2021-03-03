@@ -62,6 +62,7 @@ class Registros_MySQL:
             logs = []
             for registro in registros:
                 logs.append(registro[0])
+                print(registro[0])
             return logs
         except:
             return None
