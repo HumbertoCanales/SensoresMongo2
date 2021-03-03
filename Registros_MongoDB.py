@@ -18,10 +18,10 @@ class mongo:
             print(e.code)
             print(e.details)
     
-    def verDatos(self, colection):
+    def verDatos(self, colection, parametro={}):
         self.__connect__()
         c = self.db[colection]
-        cursor = c.find()
+        cursor = c.find(parametro)
         return cursor
     
     def addRegistro(self, colection, sensor):
@@ -38,5 +38,14 @@ class mongo:
                 sensor=Sensor(val['nombre'],val['valor'],val['tipo'])
                 valores.append(sensor)'''
     def verRegistros(self, nombre_sensor):
+        try:
+            myquery={"nombre":nombre_sensor}
+            registros = self.verDatos("sensores",myquery)
+            logs = []
+            for registro in registros:
+                logs.append(registro['valor'])
+            return logs
+        except:
+            return None
         pass
             
