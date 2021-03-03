@@ -1,5 +1,5 @@
-import Adafruit_DHT as adafruit_dht
-import RPi.GPIO as GPIO
+#import Adafruit_DHT as adafruit_dht
+#import RPi.GPIO as GPIO
 import time
 import Sensor as s
 
@@ -11,10 +11,10 @@ class Sensores():
         self.PIN_ECHO = 24
         self.PIN_PIR = 21
         self.PIN_DHT = 4
-        GPIO.setmode(GPIO.BCM)
+        """GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.PIN_PIR, GPIO.IN)
         GPIO.setup(self.PIN_TRIG, GPIO.OUT)
-        GPIO.setup(self.PIN_ECHO, GPIO.IN)
+        GPIO.setup(self.PIN_ECHO, GPIO.IN)"""
     
     def getData(self):
         return self.valores
@@ -27,7 +27,7 @@ class Sensores():
         self.arreglo.append(sensor)"""
         
     def getUltrasonico(self):
-        sensor=s.Sensor("ultrasonido",50.0,"flotante")
+        sensor=s.Sensor("ultrasonico",50.0,"flotante")
         self.arreglo.append(sensor)
         """try:
             GPIO.output(self.PIN_TRIG, True)

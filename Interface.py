@@ -1,7 +1,7 @@
 import sys 
 import time
 from pymongo import MongoClient
-#from Registros_MySQL import Registros_MySQL
+from Registros_MySQL import Registros_MySQL
 from Registros_MongoDB import mongo
 from Sensores import Sensores
 
@@ -22,8 +22,7 @@ def menu():
     print("Elige una base de datos: \n1 - MySQL\n2 - MongoDB")
     val = int_input()
     if val == 1:
-        pass
-        #db1 = Registros_MySQL()
+        db = Registros_MySQL()
     elif val == 2:
         db = mongo()
     else:
@@ -32,28 +31,27 @@ def menu():
     sensores = Sensores()
     val = 0
     while val != 3:
-        print("Elige una opción: \n1 -  Añadir registros\n2 - Leer registros\n3 - Salir")
+        print("\nElige una opción: \n1 -  Añadir registros\n2 - Leer registros\n3 - Salir")
         val = int_input()
         if val == 1:
             time.sleep(3)
             try:
                 while True:
                     valores = sensores.getValores()
-                    for val in valores:
-                        #db.addRegistro(val['nombre'], val['tipo'], val['valor'])
-                        db.addRegistro("sensores",val.getDocument())
-                        print("Nombre "+val.nombre+" Valor:  "+str(val.valor))
+                    for sensor in valores:
+                        db.addRegistro("sensores", sensor)
+                        print("Nombre "+sensor.nombre+" Valor:  "+str(sensor.valor))
                     print("Leyendo datos en 5 segundos... (Pulsa ^C para interrumpir)")
                     time.sleep(5)
             except KeyboardInterrupt:
                 pass
         elif val == 2:
-            print("XD")
-            valores = sensores.getData()
-            db.verValores('sensores',valores)
-            for val in valores:
-                print("Nombre "+val.nombre+" Valor:  "+str(val.valor))
-            valores = []
-            #db.leerRegistros()
-    
+            nombre_sensor = input("Ingresa el nombre del sensor: ")
+            registros = db.verRegistros(nombre_sensor)
+            if(registros is not None):
+                print("Registros del sensor "+nombre_sensor+":")
+                for registro in registros:
+                    print("Valor: "+str(registro)+" Fecha: ")
+            else:
+                print("Este sensor no se encuentra registrado.")
 menu()

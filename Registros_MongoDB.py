@@ -19,13 +19,14 @@ class mongo:
             print(e.details)
     
     def verDatos(self, colection):
-        db = self.__connect__()
+        self.__connect__()
         c = self.db[colection]
         cursor = c.find()
         return cursor
     
-    def addRegistro(self, colection, document):
-        db = self.__connect__()
+    def addRegistro(self, colection, sensor):
+        document = sensor.getDocument()
+        self.__connect__()
         col = self.db[colection]
         x=col.insert(document)
         return x
@@ -36,4 +37,6 @@ class mongo:
             '''if('nombre' in val and 'valor' in val and 'tipo' in val):
                 sensor=Sensor(val['nombre'],val['valor'],val['tipo'])
                 valores.append(sensor)'''
+    def verRegistros(self, nombre_sensor):
+        pass
             
